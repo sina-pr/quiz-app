@@ -1,6 +1,6 @@
 import axios from "axios";
 import { LOGIN_SUCCESS, LOGOUT, REGISTER_SUCCESS } from "./type";
-const authAPI = "https://sheltered-island-41076.herokuapp.com/";
+const authAPI = "https://sheltered-island-41076.herokuapp.com/users/";
 export const login = (userName, password) => (dispath) => {
   return axios
     .post(authAPI + "login", {

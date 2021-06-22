@@ -15,7 +15,7 @@ import { Alert } from "@material-ui/lab";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    padding: theme.spacing(10, 5),
+    padding: theme.spacing(8, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

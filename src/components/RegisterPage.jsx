@@ -16,7 +16,7 @@ import { Alert } from "@material-ui/lab";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(2),
-    padding: theme.spacing(8, 5),
+    padding: theme.spacing(6, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -29,13 +29,16 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%",
-    marginTop: theme.spacing(3),
+    margin: theme.spacing(2, 0, 1),
   },
   submit: {
+    margin: theme.spacing(2, 0, 2),
+  },
+  confirmPass: {
     marginBottom: theme.spacing(2),
   },
   alert: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(0, 0),
   },
 }));
 
@@ -129,6 +132,7 @@ const RegisterPage = ({ register, Auth }) => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                className={classes.confirmPass}
                 onChange={onChangeHandler}
                 variant="outlined"
                 required

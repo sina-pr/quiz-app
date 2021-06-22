@@ -11,10 +11,11 @@ import { useHistory } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import { register } from "../actions/auth.actions";
 import { connect } from "react-redux";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(5),
+    marginTop: theme.spacing(2),
     padding: theme.spacing(8, 5),
     display: "flex",
     flexDirection: "column",
@@ -31,7 +32,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    marginBottom: theme.spacing(2),
+  },
+  alert: {
+    margin: theme.spacing(2, 0),
   },
 }));
 
@@ -70,9 +74,9 @@ const RegisterPage = ({ register, Auth }) => {
     history.push("/login");
   };
   useEffect(() => {
-    Auth.signUpStatus === "success" && history.push("/login");
+    Auth.status === "Register success" && history.push("/login");
     Auth.loggedIn && history.push("/");
-  }, [Auth.loggedIn, Auth.signUpStatus]);
+  }, [Auth.loggedIn, Auth.signUpStatus, history]);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -138,7 +142,11 @@ const RegisterPage = ({ register, Auth }) => {
               />
             </Grid>
           </Grid>
-
+          {Auth.status === "Register failed" ? (
+            <Alert className={classes.alert} severity="error">
+              Something went wrong!
+            </Alert>
+          ) : null}
           <Button
             onClick={signUpClickHanlder}
             variant="contained"

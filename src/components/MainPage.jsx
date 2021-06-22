@@ -27,7 +27,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import ExitToApp from "@material-ui/icons/ExitToApp";
-import AccessAlarmIcon from "@material-ui/icons/AccessAlarm";
 import axios from "axios";
 import { connect } from "react-redux";
 import { logout } from "../actions/auth.actions";
@@ -81,6 +80,13 @@ const useStyle = makeStyles((theme) => ({
     marginLeft: "auto",
     marginTop: theme.spacing(1),
   },
+  stepper: {
+    justifyContent: "center",
+    padding: theme.spacing(2, 0),
+  },
+  grid_item: {
+    textAlign: "center",
+  },
 }));
 
 const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
@@ -99,7 +105,7 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
 
   const onSubmitClickHandler = () => {
     //send data to db
-    axios.post("http://localhost:3005/answers/save", {
+    axios.post("https://sheltered-island-41076.herokuapp.com/answers/save", {
       userName: Auth.user.userName,
       answers: answers,
     });
@@ -141,7 +147,7 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
   useEffect(() => {
     Auth.loggedIn ? setActiveStep(1) : setActiveStep(0);
     submited && Auth.loggedIn && setActiveStep(2);
-  }, [Auth.loggedIn, submited]);
+  }, [Auth.loggedIn, submited, history]);
   return (
     <div>
       {console.log(selectedOption)}
@@ -186,12 +192,16 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
       </AppBar>
       <Container maxWidth="lg" className={classes.container}>
         <Paper className={classes.paper}>
-          <Stepper activeStep={activeStep} alternativeLabel>
+          <Stepper
+            activeStep={activeStep}
+            className={classes.stepper}
+            alternativeLabel
+          >
             <Step>
-              <StepLabel>Login/Register </StepLabel>
+              <StepLabel>Login</StepLabel>
             </Step>
             <Step>
-              <StepLabel>Answer Questions</StepLabel>
+              <StepLabel>Answer</StepLabel>
             </Step>
             <Step>
               <StepLabel>Summary</StepLabel>
@@ -222,8 +232,10 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
                       <TableCell>{q.q}</TableCell>
                       <TableCell>{q.type}</TableCell>
                       <TableCell align="right">
-                        {answers[q.id].selectedOptions.length === 0
-                          ? "Blank"
+                        {Array.isArray(answers[q.id].selectedOptions) === true
+                          ? answers[q.id].selectedOptions.map((i) => (
+                              <div>{i}</div>
+                            ))
                           : answers[q.id].selectedOptions}
                       </TableCell>
                     </TableRow>
@@ -270,7 +282,13 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
                   onChange={onChangeRadio}
                 >
                   {questions[activeQ].options.map((o) => (
-                    <FormControlLabel value={o} control={<Radio />} label={o} />
+                    <Grid item xs={6} className={classes.grid_item}>
+                      <FormControlLabel
+                        value={o}
+                        control={<Radio />}
+                        label={o}
+                      />
+                    </Grid>
                   ))}
                 </RadioGroup>
               ) : (
@@ -280,11 +298,13 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
                   className={classes.checkBox_wrapper}
                 >
                   {questions[activeQ].options.map((o) => (
-                    <FormControlLabel
-                      control={<Checkbox />}
-                      value={o}
-                      label={o}
-                    />
+                    <Grid item xs={6} className={classes.grid_item}>
+                      <FormControlLabel
+                        control={<Checkbox />}
+                        value={o}
+                        label={o}
+                      />
+                    </Grid>
                   ))}
                 </FormGroup>
               )}

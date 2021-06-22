@@ -11,6 +11,7 @@ import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "./../actions/auth.actions";
 import { useEffect } from "react";
+import { Alert } from "@material-ui/lab";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginPage = ({ login, user }) => {
+const LoginPage = ({ login, Auth }) => {
   const classes = useStyles();
   let history = useHistory();
   const [userName, setUserName] = useState("");
@@ -60,8 +61,8 @@ const LoginPage = ({ login, user }) => {
     }
   };
   useEffect(() => {
-    user.loggedIn && history.push("/");
-  }, [user.loggedIn]);
+    Auth.loggedIn && history.push("/");
+  }, [Auth.loggedIn, history]);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -97,7 +98,9 @@ const LoginPage = ({ login, user }) => {
             onChange={onChangeHandler}
             autoComplete="current-password"
           />
-
+          {Auth.status === "Login failed" ? (
+            <Alert severity="error">Something went wrong!</Alert>
+          ) : null}
           <Button
             type="submit"
             fullWidth
@@ -129,7 +132,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 const mapStateToProps = (state) => {
   return {
-    user: state.Auth,
+    Auth: state.Auth,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

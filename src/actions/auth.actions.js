@@ -1,5 +1,11 @@
 import axios from "axios";
-import { LOGIN_SUCCESS, LOGOUT, REGISTER_SUCCESS } from "./type";
+import {
+  LOGIN_FAILED,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  REGISTER_FAILED,
+  REGISTER_SUCCESS,
+} from "./type";
 
 const authAPI = "https://sheltered-island-41076.herokuapp.com/users/";
 
@@ -14,6 +20,11 @@ export const login = (userName, password) => (dispath) => {
         type: LOGIN_SUCCESS,
         payload: res.data.token,
       });
+    })
+    .catch(() => {
+      dispath({
+        type: LOGIN_FAILED,
+      });
     });
 };
 export const register = (userName, phoneNumber, password) => (dispatch) => {
@@ -23,9 +34,14 @@ export const register = (userName, phoneNumber, password) => (dispatch) => {
       phoneNumber: phoneNumber,
       password: password,
     })
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: REGISTER_SUCCESS,
+      });
+    })
+    .catch(() => {
+      dispatch({
+        type: REGISTER_FAILED,
       });
     });
 };

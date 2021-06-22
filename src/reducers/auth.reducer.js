@@ -1,4 +1,10 @@
-import { LOGIN_SUCCESS, LOGOUT, REGISTER_SUCCESS } from "./../actions/type";
+import {
+  LOGIN_FAILED,
+  LOGIN_SUCCESS,
+  LOGOUT,
+  REGISTER_FAILED,
+  REGISTER_SUCCESS,
+} from "./../actions/type";
 import jwtDecode from "jwt-decode";
 
 const token = localStorage.getItem("TOKEN");
@@ -15,10 +21,20 @@ const authReducer = (state = initialState, action) => {
         loggedIn: true,
         user: jwtDecode(action.payload),
       };
+    case LOGIN_FAILED:
+      return {
+        ...state,
+        status: "Login failed",
+      };
     case REGISTER_SUCCESS:
       return {
         ...initialState,
-        signUpStatus: "success",
+        status: "Register success",
+      };
+    case REGISTER_FAILED:
+      return {
+        ...state,
+        status: "Register failed",
       };
 
     case LOGOUT:

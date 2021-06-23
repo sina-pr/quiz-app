@@ -79,7 +79,7 @@ const RegisterPage = ({ register, Auth }) => {
   useEffect(() => {
     Auth.status === "Register success" && history.push("/login");
     Auth.loggedIn && history.push("/");
-  }, [Auth.loggedIn, Auth.signUpStatus, history]);
+  }, [Auth.loggedIn, Auth.status, history]);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

@@ -1,4 +1,4 @@
-import { ADD_ANSWER, REMOVE_ANSWER } from "../actions/type";
+import { ADD_ANSWER, REMOVE_ANSWER, REMOVE_ALL_ANSWERS } from "../actions/type";
 
 const initialState = [];
 
@@ -17,7 +17,9 @@ export const AnswerReducer = (state = initialState, action) => {
 
     case REMOVE_ANSWER:
       return state.filter((_, i) => i !== state.length - 1);
-
+    case REMOVE_ALL_ANSWERS: {
+      return [];
+    }
     default:
       return state;
   }

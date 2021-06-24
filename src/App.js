@@ -4,10 +4,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import MainPage from "./components/MainPage/MainPage";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import LoginPage from "./components/LoginPage/LoginPage";
-import { connect } from "react-redux";
 
-function App({ user }) {
-  console.log(user);
+function App() {
   return (
     <Router>
       <Switch>
@@ -24,9 +22,5 @@ function App({ user }) {
     </Router>
   );
 }
-const mapStateToProps = (state) => {
-  return {
-    user: state.User,
-  };
-};
-export default connect(mapStateToProps)(App);
+
+export default App;

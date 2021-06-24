@@ -19,7 +19,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const Summary = ({ answers, Auth, questions }) => {
+const Summary = ({ answers, Auth, Questions }) => {
   const classes = useStyle();
   const onSubmitClickHandler = () => {
     //send data to db
@@ -43,7 +43,7 @@ const Summary = ({ answers, Auth, questions }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {questions.map((q) => (
+          {Questions.all.map((q) => (
             <TableRow key={q.id}>
               <TableCell component="th" scope="row">
                 {q.id + 1}
@@ -76,6 +76,7 @@ const mapStateToProps = (state) => {
   return {
     Auth: state.Auth,
     answers: state.Answers,
+    Questions: state.Questions,
   };
 };
 export default connect(mapStateToProps)(Summary);

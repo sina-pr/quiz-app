@@ -4,6 +4,7 @@ import {
   LOGOUT,
   REGISTER_FAILED,
   REGISTER_SUCCESS,
+  REMOVE_SIGNUP_STATUS,
 } from "./../actions/type";
 import jwtDecode from "jwt-decode";
 
@@ -28,12 +29,14 @@ const authReducer = (state = initialState, action) => {
       };
     case REGISTER_SUCCESS:
       return {
-        ...initialState,
+        loggedIn: false,
+        user: {},
         status: "Register success",
       };
     case REGISTER_FAILED:
       return {
-        ...state,
+        loggedIn: false,
+        user: {},
         status: "Register failed",
       };
 
@@ -42,6 +45,11 @@ const authReducer = (state = initialState, action) => {
       return {
         loggedIn: false,
         user: {},
+      };
+    case REMOVE_SIGNUP_STATUS:
+      return {
+        ...state,
+        status: "",
       };
     default:
       return state;

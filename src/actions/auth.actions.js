@@ -5,6 +5,7 @@ import {
   LOGOUT,
   REGISTER_FAILED,
   REGISTER_SUCCESS,
+  REMOVE_SIGNUP_STATUS,
 } from "./type";
 
 const authAPI = "https://sheltered-island-41076.herokuapp.com/users/";
@@ -44,6 +45,9 @@ export const register = (userName, phoneNumber, password) => (dispatch) => {
         type: REGISTER_FAILED,
       });
     });
+};
+export const removeSignUpStatus = () => {
+  return { type: REMOVE_SIGNUP_STATUS };
 };
 export const logout = () => {
   return { type: LOGOUT };

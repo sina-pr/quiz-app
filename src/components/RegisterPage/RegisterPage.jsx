@@ -12,6 +12,8 @@ import Paper from "@material-ui/core/Paper";
 import { register } from "../../actions/auth.actions";
 import { connect } from "react-redux";
 import { Alert } from "@material-ui/lab";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -42,37 +44,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const signUpSchema = yup.object({
+  email: yup
+    .string("Enter your email")
+    .email("Enter a valid email")
+    .required("Email is required"),
+  password: yup
+    .string("Enter your password")
+    .min(5, "Password should be minimum 5 character")
+    .required("Password is required"),
+  phoneNumber: yup
+    .string("Enter your phone number")
+    .length(11, "Enter valid phone number"),
+});
+
 const RegisterPage = ({ register, Auth }) => {
   const classes = useStyles();
   let history = useHistory();
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      phoneNumber: "",
+      password: "",
+    },
+    validationSchema: signUpSchema,
+    onSubmit: (values) => {
+      register(values.email, values.phoneNumber, values.password);
+    },
+  });
 
-  const [userName, setUserName] = useState("");
-  const [password, setpassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-
-  const signUpClickHanlder = (e) => {
-    e.preventDefault();
-    register(userName, phoneNumber, password);
-  };
-  const onChangeHandler = (e) => {
-    switch (e.target.id) {
-      case "userName":
-        setUserName(e.target.value);
-        break;
-      case "password":
-        setpassword(e.target.value);
-        break;
-      case "phoneNumber":
-        setPhoneNumber(e.target.value);
-        break;
-      case "confirmPass":
-        setConfirmPassword(e.target.value);
-        break;
-      default:
-        return;
-    }
-  };
   const loginClickHandler = () => {
     history.push("/login");
   };
@@ -88,37 +88,46 @@ const RegisterPage = ({ register, Auth }) => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                onChange={onChangeHandler}
-                autoComplete="userName"
+                onChange={formik.handleChange}
+                autoComplete="email"
                 variant="outlined"
-                name="userName"
+                name="email"
                 required
                 fullWidth
-                id="userName"
-                label="User Name"
-                value={userName}
+                id="email"
+                label="Email"
+                value={formik.values.email}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
                 autoFocus
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                onChange={onChangeHandler}
+                onChange={formik.handleChange}
                 variant="outlined"
                 fullWidth
                 id="phoneNumber"
                 label="Phone Number"
                 name="phoneNumber"
-                value={phoneNumber}
+                error={
+                  formik.touched.phoneNumber &&
+                  Boolean(formik.errors.phoneNumber)
+                }
+                helperText={
+                  formik.touched.phoneNumber && formik.errors.phoneNumber
+                }
+                value={formik.values.phoneNumber}
                 autoComplete="phoneNumber"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                onChange={onChangeHandler}
+                onChange={formik.handleChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -126,11 +135,15 @@ const RegisterPage = ({ register, Auth }) => {
                 label="Password"
                 type="password"
                 id="password"
-                value={password}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+                value={formik.values.password}
                 autoComplete="current-password"
               />
             </Grid>
-            <Grid item xs={12}>
+            {/*<Grid item xs={12}>
               <TextField
                 className={classes.confirmPass}
                 onChange={onChangeHandler}
@@ -144,7 +157,7 @@ const RegisterPage = ({ register, Auth }) => {
                 value={confirmPassword}
                 autoComplete="confirmPass"
               />
-            </Grid>
+            </Grid>*/}
           </Grid>
           {Auth.status === "Register failed" ? (
             <Alert className={classes.alert} severity="error">
@@ -152,11 +165,11 @@ const RegisterPage = ({ register, Auth }) => {
             </Alert>
           ) : null}
           <Button
-            onClick={signUpClickHanlder}
             variant="contained"
             fullWidth
             color="primary"
             className={classes.submit}
+            type="submit"
           >
             Sign Up
           </Button>
@@ -180,8 +193,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    register: (userName, phoneNumber, password) =>
-      dispatch(register(userName, phoneNumber, password)),
+    register: (email, phoneNumber, password) =>
+      dispatch(register(email, phoneNumber, password)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);

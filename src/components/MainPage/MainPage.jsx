@@ -19,11 +19,15 @@ import StepLabel from "@material-ui/core/StepLabel";
 import ExitToApp from "@material-ui/icons/ExitToApp";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth.actions";
-import { addAnswer, removeAnswer } from "../../actions/answer.actions";
+import { getAllQuestions } from "../../actions/question.action";
+import {
+  addAnswer,
+  removeAnswer,
+  removeAllAnswers,
+} from "../../actions/answer.actions";
 import Summary from "./Summary";
 import Welcome from "./Welcome";
-import Questions from "./Questions";
-import axios from "axios";
+import Question from "./Question";
 const useStyle = makeStyles((theme) => ({
   root: {
     flex: 1,
@@ -51,38 +55,19 @@ const useStyle = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "space-between",
   },
-  radioBtn_wrapper: {
-    justifyContent: "space-around",
-  },
-  btn_wrapper: {
-    justifyContent: "center",
-    marginTop: theme.spacing(1),
-    flex: 1,
-  },
-  type: {
-    marginLeft: theme.spacing(1),
-    marginTop: theme.spacing(-1),
-  },
-  checkBox_wrapper: {
-    justifyContent: "space-around",
-  },
-  table: {
-    marginBottom: "auto",
-  },
-  submit_btn: {
-    marginLeft: "auto",
-    marginTop: theme.spacing(1),
-  },
   stepper: {
     justifyContent: "center",
     padding: theme.spacing(2, 0),
   },
-  grid_item: {
-    textAlign: "center",
-  },
 }));
 
-const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
+const MainPage = ({
+  Auth,
+  logout,
+  getAllQuestions,
+  Questions,
+  removeAllAnswers,
+}) => {
   const classes = useStyle();
   let history = useHistory();
   const loginClickHanlder = () => {
@@ -92,7 +77,6 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
     history.push("/register");
   };
   const [activeStep, setActiveStep] = useState(0);
-  const [questions, setQuestions] = useState([]);
   const [submited, setSubmited] = useState(false);
 
   useEffect(() => {
@@ -100,11 +84,8 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
     submited && Auth.loggedIn && setActiveStep(2);
   }, [Auth.loggedIn, submited]);
   useEffect(() => {
-    axios.get("http://localhost:5000/questions/all").then((res) => {
-      console.log(res.data);
-      setQuestions(res.data);
-    });
-  });
+    getAllQuestions();
+  }, []);
   return (
     <div>
       <AppBar color="default" className={classes.root} position="static">
@@ -120,6 +101,7 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
               <IconButton
                 onClick={() => {
                   logout();
+                  removeAllAnswers();
                 }}
                 color="inherit"
               >
@@ -167,9 +149,9 @@ const MainPage = ({ Auth, logout, addAnswer, removeAnswer, answers }) => {
         <Paper className={classes.paper_question}>
           {Auth.loggedIn ? (
             submited ? (
-              <Summary questions={questions} />
+              <Summary />
             ) : (
-              <Questions questions={questions} setSubmited={setSubmited} />
+              <Question setSubmited={setSubmited} />
             )
           ) : (
             <Welcome />
@@ -183,6 +165,7 @@ const mapStateToProps = (state) => {
   return {
     Auth: state.Auth,
     answers: state.Answers,
+    Questions: state.Questions,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -191,6 +174,8 @@ const mapDispatchToProps = (dispatch) => {
     addAnswer: (questionId, selectedOption) =>
       dispatch(addAnswer(questionId, selectedOption)),
     removeAnswer: () => dispatch(removeAnswer()),
+    getAllQuestions: () => dispatch(getAllQuestions()),
+    removeAllAnswers: () => dispatch(removeAllAnswers()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

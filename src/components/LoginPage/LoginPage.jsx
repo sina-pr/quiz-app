@@ -9,9 +9,11 @@ import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { login } from "../../actions/auth.actions";
+import { login, removeSignUpStatus } from "../../actions/auth.actions";
 import { useEffect } from "react";
+import * as yup from "yup";
 import { Alert } from "@material-ui/lab";
+import { useFormik } from "formik";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -34,33 +36,36 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
-const LoginPage = ({ login, Auth }) => {
+const signInSchema = yup.object({
+  email: yup
+    .string("Enter your email")
+    .email("Enter a valid email")
+    .required("Email is required"),
+  password: yup
+    .string("Enter your password")
+    .min(5, "Password should be minimum 5 character")
+    .required("Password is required"),
+});
+const LoginPage = ({ login, Auth, removeSignUpStatus }) => {
   const classes = useStyles();
   let history = useHistory();
-  const [userName, setUserName] = useState("");
-  const [password, setpassword] = useState("");
 
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: signInSchema,
+    onSubmit: (values) => {
+      login(values.email, values.password);
+    },
+  });
   const registerClickHandler = () => {
     history.push("/register");
   };
-  const loginClickHandler = (e) => {
-    e.preventDefault();
-    login(userName, password);
-  };
-  const onChangeHandler = (e) => {
-    switch (e.target.id) {
-      case "userName":
-        setUserName(e.target.value);
-        break;
-      case "password":
-        setpassword(e.target.value);
-        break;
-      default:
-        return;
-    }
-  };
+
   useEffect(() => {
+    removeSignUpStatus();
     Auth.loggedIn && history.push("/");
   }, [Auth.loggedIn, history]);
   return (
@@ -71,18 +76,20 @@ const LoginPage = ({ login, Auth }) => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={formik.handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="userName"
-            label="User Name"
-            name="username"
-            autoComplete="username"
-            value={userName}
-            onChange={onChangeHandler}
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
             autoFocus
           />
           <TextField
@@ -94,20 +101,22 @@ const LoginPage = ({ login, Auth }) => {
             label="Password"
             type="password"
             id="password"
-            value={password}
-            onChange={onChangeHandler}
-            autoComplete="current-password"
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            autoComplete="password"
           />
           {Auth.status === "Login failed" ? (
             <Alert severity="error">Something went wrong!</Alert>
           ) : null}
           <Button
+            className={classes.submit}
             type="submit"
             fullWidth
             variant="outlined"
             color="primary"
-            className={classes.submit}
-            onClick={loginClickHandler}
+            type="submit"
           >
             Sign In
           </Button>
@@ -128,6 +137,9 @@ const LoginPage = ({ login, Auth }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (userName, password) => dispatch(login(userName, password)),
+    removeSignUpStatus: () => {
+      dispatch(removeSignUpStatus());
+    },
   };
 };
 const mapStateToProps = (state) => {

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { GET_QUESTIONS_SUCCESS, GET_QUESTIONS_FAILED } from "./type";
 
-const questionAPI = "http://localhost:5000/questions/";
+const questionAPI = "https://sheltered-island-41076.herokuapp.com/questions/";
 
 export const getAllQuestions = () => (dispatch) => {
   return axios

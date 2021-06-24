@@ -14,7 +14,7 @@ const useStyle = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.dark,
     color: "white",
     padding: theme.spacing(0.6, 1.4),
-    borderRadius: 3,
+    borderRadius: 5,
   },
 }));
 

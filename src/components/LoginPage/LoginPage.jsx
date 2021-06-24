@@ -9,7 +9,7 @@ import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import { login } from "./../actions/auth.actions";
+import { login } from "../../actions/auth.actions";
 import { useEffect } from "react";
 import { Alert } from "@material-ui/lab";
 const useStyles = makeStyles((theme) => ({

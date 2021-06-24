@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
-import { register } from "../actions/auth.actions";
+import { register } from "../../actions/auth.actions";
 import { connect } from "react-redux";
 import { Alert } from "@material-ui/lab";
 

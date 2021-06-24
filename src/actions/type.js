@@ -5,3 +5,4 @@ export const REGISTER_FAILED = "REGISTER_FAILED";
 export const LOGOUT = "LOGOUT";
 export const ADD_ANSWER = "ADD_ANSWER";
 export const REMOVE_ANSWER = "REMOVE_ANSWER";
+export const GET_QUESTIONS_SUCCESS = "GET_QUESTIONS_SUCCESS";

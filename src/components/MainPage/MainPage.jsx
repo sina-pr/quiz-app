@@ -85,7 +85,7 @@ const MainPage = ({
   }, [Auth.loggedIn, submited]);
   useEffect(() => {
     getAllQuestions();
-  }, []);
+  }, [getAllQuestions]);
   return (
     <div>
       <AppBar color="default" className={classes.root} position="static">
@@ -96,7 +96,7 @@ const MainPage = ({
           {Auth.loggedIn ? (
             <>
               <IconButton className={classes.avatar}>
-                <Avatar>{Auth.user.userName[0].toUpperCase()}</Avatar>
+                <Avatar>{Auth.user.email[0].toUpperCase()}</Avatar>
               </IconButton>
               <IconButton
                 onClick={() => {

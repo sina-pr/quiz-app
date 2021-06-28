@@ -24,7 +24,7 @@ const Summary = ({ answers, Auth, Questions }) => {
   const onSubmitClickHandler = () => {
     //send data to db
     axios.post("https://sheltered-island-41076.herokuapp.com/answers/save", {
-      userName: Auth.user.userName,
+      email: Auth.user.email,
       answers: answers,
     });
   };

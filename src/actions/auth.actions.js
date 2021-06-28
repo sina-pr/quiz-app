@@ -10,10 +10,10 @@ import {
 
 const authAPI = "https://sheltered-island-41076.herokuapp.com/users/";
 
-export const login = (userName, password) => (dispath) => {
+export const login = (email, password) => (dispath) => {
   return axios
     .post(authAPI + "login", {
-      userName: userName,
+      email: email,
       password: password,
     })
     .then((res) => {
@@ -28,10 +28,10 @@ export const login = (userName, password) => (dispath) => {
       });
     });
 };
-export const register = (userName, phoneNumber, password) => (dispatch) => {
+export const register = (email, phoneNumber, password) => (dispatch) => {
   return axios
     .post(authAPI + "register", {
-      userName: userName,
+      email: email,
       phoneNumber: phoneNumber,
       password: password,
     })

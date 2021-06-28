@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -67,7 +67,7 @@ const LoginPage = ({ login, Auth, removeSignUpStatus }) => {
   useEffect(() => {
     removeSignUpStatus();
     Auth.loggedIn && history.push("/");
-  }, [Auth.loggedIn, history]);
+  }, [Auth.loggedIn, history, removeSignUpStatus]);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -112,7 +112,6 @@ const LoginPage = ({ login, Auth, removeSignUpStatus }) => {
           ) : null}
           <Button
             className={classes.submit}
-            type="submit"
             fullWidth
             variant="outlined"
             color="primary"
@@ -136,7 +135,7 @@ const LoginPage = ({ login, Auth, removeSignUpStatus }) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    login: (userName, password) => dispatch(login(userName, password)),
+    login: (email, password) => dispatch(login(email, password)),
     removeSignUpStatus: () => {
       dispatch(removeSignUpStatus());
     },

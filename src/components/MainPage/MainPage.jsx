@@ -3,9 +3,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
 import { useHistory } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
@@ -14,11 +12,7 @@ import Step from "@material-ui/core/Step";
 import { useState } from "react";
 import StepLabel from "@material-ui/core/StepLabel";
 
-//import questions from "../../questions/questions";
-
-import ExitToApp from "@material-ui/icons/ExitToApp";
 import { connect } from "react-redux";
-import { logout } from "../../actions/auth.actions";
 import { getAllQuestions } from "../../actions/question.action";
 import {
   addAnswer,
@@ -28,6 +22,7 @@ import {
 import Summary from "./Summary";
 import Welcome from "./Welcome";
 import Question from "./Question";
+import AppBarMenu from "./AppBarMenu";
 const useStyle = makeStyles((theme) => ({
   root: {
     flex: 1,
@@ -35,15 +30,14 @@ const useStyle = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  avatar: {
-    backgroundColor: theme.palette.secondary,
-  },
+
   btns: {
     marginLeft: theme.spacing(2),
   },
   container: {
     marginTop: theme.spacing(4),
   },
+
   paper: {
     marginBottom: theme.spacing(3),
     padding: theme.spacing(2, 4),
@@ -61,13 +55,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const MainPage = ({
-  Auth,
-  logout,
-  getAllQuestions,
-  Questions,
-  removeAllAnswers,
-}) => {
+const MainPage = ({ Auth, getAllQuestions, removeAllAnswers }) => {
   const classes = useStyle();
   let history = useHistory();
   const loginClickHanlder = () => {
@@ -88,25 +76,15 @@ const MainPage = ({
   }, [getAllQuestions]);
   return (
     <div>
-      <AppBar color="default" className={classes.root} position="static">
+      <AppBar color="primary" className={classes.root} position="static">
         <Toolbar>
           <Typography className={classes.title} variant="h6">
             Question & Answer
           </Typography>
           {Auth.loggedIn ? (
             <>
-              <IconButton className={classes.avatar}>
-                <Avatar>{Auth.user.email[0].toUpperCase()}</Avatar>
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  logout();
-                  removeAllAnswers();
-                }}
-                color="inherit"
-              >
-                <ExitToApp />
-              </IconButton>
+              <Typography>{Auth.user.email}</Typography>
+              <AppBarMenu />
             </>
           ) : (
             <>
@@ -170,7 +148,6 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout: () => dispatch(logout()),
     addAnswer: (questionId, selectedOption) =>
       dispatch(addAnswer(questionId, selectedOption)),
     removeAnswer: () => dispatch(removeAnswer()),
